@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:test_project/screens/registration_screen.dart';
+import 'package:test_project/store/auth/auth.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -10,7 +11,10 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final AuthStore store = AuthStore();
   bool _passwordVisible = false;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +32,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Observer(
                   builder: (_) => TextField(
-                    onChanged: (value) => {},
+                    onChanged: (value) => store.setPhone(value),
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Номер телефона',
@@ -43,7 +47,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 child: Observer(
                   builder: (_) => TextField(
                     obscureText: !_passwordVisible,
-                    onChanged: (value) => {},
+                    onChanged: (value) => store.setPassword(value),
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       labelText: 'Пароль',
@@ -77,7 +81,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 width: 150,
                 child: ElevatedButton(
                   child: const Text('Войти'),
-                  onPressed: () {},
+                  onPressed: store.loginUser,
                 ),
               ),
               const SizedBox(
