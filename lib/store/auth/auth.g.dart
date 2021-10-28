@@ -12,13 +12,13 @@ mixin _$AuthStore on _AuthStore, Store {
   final _$phoneAtom = Atom(name: '_AuthStore.phone');
 
   @override
-  String? get phone {
+  String get phone {
     _$phoneAtom.reportRead();
     return super.phone;
   }
 
   @override
-  set phone(String? value) {
+  set phone(String value) {
     _$phoneAtom.reportWrite(value, super.phone, () {
       super.phone = value;
     });
@@ -27,13 +27,13 @@ mixin _$AuthStore on _AuthStore, Store {
   final _$passwordAtom = Atom(name: '_AuthStore.password');
 
   @override
-  String? get password {
+  String get password {
     _$passwordAtom.reportRead();
     return super.password;
   }
 
   @override
-  set password(String? value) {
+  set password(String value) {
     _$passwordAtom.reportWrite(value, super.password, () {
       super.password = value;
     });
@@ -51,6 +51,21 @@ mixin _$AuthStore on _AuthStore, Store {
   set userData(dynamic value) {
     _$userDataAtom.reportWrite(value, super.userData, () {
       super.userData = value;
+    });
+  }
+
+  final _$loadingAtom = Atom(name: '_AuthStore.loading');
+
+  @override
+  bool get loading {
+    _$loadingAtom.reportRead();
+    return super.loading;
+  }
+
+  @override
+  set loading(bool value) {
+    _$loadingAtom.reportWrite(value, super.loading, () {
+      super.loading = value;
     });
   }
 
@@ -90,7 +105,8 @@ mixin _$AuthStore on _AuthStore, Store {
     return '''
 phone: ${phone},
 password: ${password},
-userData: ${userData}
+userData: ${userData},
+loading: ${loading}
     ''';
   }
 }
