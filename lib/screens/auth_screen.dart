@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:test_project/screens/registration_screen.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:test_project/screens/profile_screen.dart';
 import 'package:test_project/store/auth/auth.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -13,8 +14,8 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final AuthStore store = AuthStore();
   bool _passwordVisible = false;
-
-
+  var maskFormatter = MaskTextInputFormatter(
+      mask: '+7 (###) ###-##-##', filter: {"#": RegExp(r'[0-9]')});
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +32,11 @@ class _AuthScreenState extends State<AuthScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Observer(
-                  builder: (_) => TextField(
-                    onChanged: (value) => store.setPhone(value),
+                  builder: (_) => TextFormField(
+                    keyboardType: TextInputType.phone,
+                    onChanged: (_) =>
+                        {store.setPhone(maskFormatter.getUnmaskedText())},
+                    inputFormatters: [maskFormatter],
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Номер телефона',
@@ -70,18 +74,16 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                 ),
               ),
-              // Observer(
-              //   builder: (_) => AnimatedOpacity(
-              //     child: const LinearProgressIndicator(),
-              //     duration: const Duration(milliseconds: 300),
-              //     opacity: 0,
-              //   ),
-              // ),
               SizedBox(
                 width: 150,
                 child: ElevatedButton(
+                  style: store.loading
+                      ? ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.grey))
+                      : null,
                   child: const Text('Войти'),
-                  onPressed: store.loginUser,
+                  onPressed: store.loading ? null : store.loginUser,
                 ),
               ),
               const SizedBox(
@@ -102,7 +104,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const RegistrationScreen()),
+                        builder: (context) => const ProfileScreen()),
                   );
                 },
                 child: const Padding(
